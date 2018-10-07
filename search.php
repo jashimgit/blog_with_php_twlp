@@ -15,8 +15,14 @@ if (!isset($_POST['search']) || $_POST['search'] == NULL){
 	<div class="contentsection contemplete clear">
 		<div class="maincontent clear">
 		<?php
-			$query = "SELECT * FROM tbl_post WHERE title LIKE '%$searchKeyword%' OR body LIKE '%$searchKeyword%' ";
+			$query = "SELECT * FROM tbl_post 
+					  WHERE title 
+					  LIKE '%$searchKeyword%' 
+					  OR body 
+					  LIKE '%$searchKeyword%' ";
+
 			$post = $db->select($query);
+			
 			if($post){
 				while ($result = $post->fetch_assoc()){ ?>
             <div class="samepost clear">

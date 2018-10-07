@@ -46,6 +46,36 @@ $(window).load(function() {
 	});
 });
 </script>
+<script>
+$(document).ready(function(){
+	load_data();
+	function load_data(query)
+	{
+		$.ajax({
+			url:"search.php",
+			method:"post",
+			data:{query:search},
+			success:function(data)
+			{
+				$('#result').html(data);
+			}
+		});
+	}
+	
+	$('#search_text').keyup(function(){
+		var search = $(this).val();
+		if(search != '')
+		{
+			load_data(search);
+		}
+		else
+		{
+			load_data();			
+		}
+	});
+});
+</script>
+
 </head>
 
 <body>
@@ -66,7 +96,7 @@ $(window).load(function() {
 			</div>
 			<div class="searchbtn clear">
 			<form action="search.php" method="post">
-				<input type="text" name="search" placeholder="Search keyword..."/>
+				<input type="text" name="search" id="search_text" placeholder="Search keyword..."/>
 				<input type="submit" name="submit" value="Search"/>
 			</form>
 			</div>
