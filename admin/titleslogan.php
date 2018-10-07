@@ -29,7 +29,73 @@
                 <h2>Update Site Title and Description</h2>
             <div class="leftside">
                 <div class="block sloginblock">
-                 <form>
+                    <?php
+ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $title    = mysqli_real_escape_string($db->link, $_POST['title']);
+    $slogan  = mysqli_real_escape_string($db->link,  $_POST['slogan']);
+    
+
+    $permited = array('png');
+
+    $file_name = $_FILES['logo']['name'];
+    $file_size = $_FILES['logo']['size'];
+    $file_temp = $_FILES['logo']['tmp_name'];
+
+    $div            = explode('.', $file_name);
+    $file_ext       = strtolower(end($div));
+    $same_image     = 'logo'.'.'.$file_name;
+    $uploaded_image = "upload/".$same_image;
+
+    if ($title  == ""    ||
+        $slogan == ""    
+        ){
+        echo "<span class='error'>Field must not be empty !!  </span>";
+    } else {
+        if(!empty($file_name)){
+            if ($file_size > 1048567){
+                echo "<span class='error'>Image size should be less than 1 MB! </span>";
+            } elseif (in_array($file_ext, $permited) == false){
+                echo "<span class='error'>File support only ".implode(',', $permited)." </span>";
+            } else {
+                move_uploaded_file($file_temp, $uploaded_image);
+                    $query = "UPDATE  tbl_slogan SET     
+                    title  = '$title',
+                    slogan   = '$slogan',
+                    logo  = '$uploaded_image'
+                    
+                    WHERE id = '1'
+                    ";      
+                
+                    $updated_rows = $db->update($query);
+
+                    if ($updated_rows){
+                        echo "<span class='error'>Data Updated successfully </span>";
+                    } else {
+                        echo "<span class='error'>data not Updated successfully</span>";
+                    }
+                }
+            } else {
+                $query = "UPDATE tbl_slogan SET     
+                title  = '$title',
+                slogan   = '$slogan'
+                
+                
+                WHERE id = '1'
+                ";      
+        
+
+        $updated_rows = $db->update($query);
+
+            if ($updated_rows){
+                echo "<span class='error'>Data Updated successfully </span>";
+            } else {
+                echo "<span class='error'>data not Updated successfully</span>";
+            }
+        }
+    }        
+ }
+?>
+                 <form action="" method="post" enctype="multipart/form-data" >
                     <table class="form">					
                         <tr>
                             <td>
